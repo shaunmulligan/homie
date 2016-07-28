@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"./grovepi"
+	"github.com/shaunmulligan/goapp/grovepi"
 )
 
 func main() {

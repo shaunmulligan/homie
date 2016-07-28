@@ -13,17 +13,21 @@ To use this boilerplate effectively you will need the following installed on you
 
 1. First clone this repo:
 ```
-$ git clone https://github.com/shaunmulligan/goapp.git
+$ git clone https://github.com/shaunmulligan/resin-go-boilerplate.git
 ```
-2. Change into the repo, add your resin.io application git remote and push.
+2. Set your GOPATH as this repo:
 ```
-$ cd goapp
+$ export GOPATH=$PWD
+```
+3. Change into the repo, add your resin.io application git remote and push.
+```
+$ cd resin-go-boilerplate
 $ git remote add resin shaun@git.resin.io:shaun/myfleet.git
 $ git push resin master
 ```
 After the build completes you should see a friendly unicorn on your console and the device should start downloading the new container. When the container starts you should see `hello` and `world` printed multiple times
 
-3. Now change a line in the main.go and run resin sync with the devices UUID as a parameter.
+4. Now change a line in the main.go and run resin sync with the devices UUID as a parameter.
 ```
 $ resin sync <UUID>
 ```
