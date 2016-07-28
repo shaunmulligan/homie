@@ -1,21 +1,23 @@
 package main
 
 import (
-    "fmt"
-    "html"
-    "log"
-    "net/http"
+	"fmt"
+	"time"
 
-    "github.com/gorilla/mux"
+	"./grovepi"
 )
 
 func main() {
-    fmt.Println("Yay our golang server is running on port :80...")
-    router := mux.NewRouter().StrictSlash(true)
-    router.HandleFunc("/", Index)
-    log.Fatal(http.ListenAndServe(":80", router))
-}
-
-func Index(w http.ResponseWriter, r *http.Request) {
-    fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path))
+	var g grovepi.GrovePi
+	g = *grovepi.InitGrovePi(0x04)
+	defer g.CloseDevice()
+	for {
+		time.Sleep(2 * time.Second)
+		t, h, err := g.ReadDHT(grovepi.D4)
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println(t)
+		fmt.Println(h)
+	}
 }

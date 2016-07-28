@@ -16,6 +16,14 @@
 			"revision": "9fa818a44c2bf1396a17f9d5a3c0f6dd39d2ff8e",
 			"branch": "master",
 			"notests": true
+		},
+		{
+			"importpath": "github.com/mrmorphic/hwio",
+			"repository": "https://github.com/mrmorphic/hwio",
+			"vcs": "git",
+			"revision": "4af3c0a919085ce9b99bbe5a8e3334b805618c2e",
+			"branch": "master",
+			"notests": true
 		}
 	]
 }
