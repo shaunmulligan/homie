@@ -27,7 +27,7 @@ $ git push resin master
 ```
 After the build completes you should see a friendly unicorn on your console and the device should start downloading the new container. When the container starts you should see `hello` and `world` printed multiple times
 
-4. Now change a line in the main.go and run resin sync with the devices UUID as a parameter.
+3. Now change a line in the main.go and run resin sync with the devices UUID as a parameter.
 ```
 $ resin sync <UUID>
 ```
@@ -67,3 +67,7 @@ Synced /usr/src/app on 598e029.
 Application container started.
 ```
 And your new code should be running on the device in about 30 seconds. Whenever you are happy with a version of your code and it looks like it is working, just commit and push. Now all your devices should be running the newest code you pushed. You will also need to do this if you install any external dependencies for your golang project like `dbus` or something.
+
+[205 204 12 68]
+11001101 11001100 00001100 01000100
+[0 205 204 12 68 154 153 169 68]

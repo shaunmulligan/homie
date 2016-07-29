@@ -2,6 +2,7 @@ package grovepi
 
 import (
 	"fmt"
+	"math"
 	"time"
 	"unsafe"
 
@@ -23,12 +24,16 @@ const (
 	D8 = 8
 
 	//Cmd format
-	DIGITAL_READ  = 1
-	DIGITAL_WRITE = 2
-	ANALOG_READ   = 3
-	ANALOG_WRITE  = 4
-	PIN_MODE      = 5
-	DHT_READ      = 40
+	DIGITAL_READ     = 1
+	DIGITAL_WRITE    = 2
+	ANALOG_READ      = 3
+	ANALOG_WRITE     = 4
+	PIN_MODE         = 5
+	DHT_READ         = 40
+	DUST_SENSOR_EN   = 14
+	DUST_SENSOR_DIS  = 15
+	DUST_SENSOR_READ = 10
+	VERSION          = 8
 )
 
 type GrovePi struct {
@@ -117,6 +122,7 @@ func (grovePi *GrovePi) ReadDHT(pin byte) (float32, float32, error) {
 		return 0, 0, err
 	}
 	temperatureData := rawdata[1:5]
+	fmt.Println(rawdata)
 
 	tInt := int32(temperatureData[0]) | int32(temperatureData[1])<<8 | int32(temperatureData[2])<<16 | int32(temperatureData[3])<<24
 	t := (*(*float32)(unsafe.Pointer(&tInt)))
@@ -141,4 +147,62 @@ func (grovePi *GrovePi) readDHTRawData(cmd []byte) ([]byte, error) {
 		return nil, err
 	}
 	return raw, nil
+}
+
+func (grovePi *GrovePi) EnableDustSensor() error {
+	cmd := []byte{DUST_SENSOR_EN, 0, 0, 0}
+	err := grovePi.i2cDevice.Write(1, cmd)
+	if err != nil {
+		return err
+	}
+	time.Sleep(600 * time.Millisecond)
+	return err
+}
+
+func (grovePi *GrovePi) DisableDustSensor() error {
+	cmd := []byte{DUST_SENSOR_DIS, 0, 0, 0}
+	err := grovePi.i2cDevice.Write(1, cmd)
+	if err != nil {
+		return err
+	}
+	time.Sleep(600 * time.Millisecond)
+	return err
+}
+
+func (grovePi *GrovePi) ReadDustSensor() (float64, error) {
+	cmd := []byte{DUST_SENSOR_READ, 0, 0, 0}
+	err := grovePi.i2cDevice.Write(1, cmd)
+	if err != nil {
+		return -1000, err
+	}
+	time.Sleep(600 * time.Millisecond)
+	data, err := grovePi.i2cDevice.Read(0, 4)
+	fmt.Println(data)
+	if data[0] != 255 {
+		lowPulseOccupancy := int(data[3])*256*256 + int(data[2])*256 + int(data[1])
+		ratio := float64(lowPulseOccupancy) / (30000 * 10)
+		con := 1.1*math.Pow(ratio, 3) - 3.8*math.Pow(ratio, 2) + 520*ratio + 0.62
+		return con, err
+	} else {
+		return -1.0, err
+	}
+}
+
+func (grovePi *GrovePi) Version() (string, error) {
+	cmd := []byte{VERSION, 0, 0, 0}
+	err := grovePi.i2cDevice.Write(1, cmd)
+	if err != nil {
+		return "invalid", err
+	}
+	time.Sleep(600 * time.Millisecond)
+	v, err := grovePi.i2cDevice.Read(0, 4)
+	version := fmt.Sprintf("v%v.%v.%v", v[1], v[2], v[3])
+	return version, err
+}
+
+func (grovePi *GrovePi) Temp(pin byte) (float64, error) {
+	a, err := grovePi.AnalogRead(pin)
+	res := float64((1023-a)*10000) / float64(a)
+	t := (1/(math.Log(res/10000)/4250+1/298.15) - 273.15)
+	return t, err
 }
