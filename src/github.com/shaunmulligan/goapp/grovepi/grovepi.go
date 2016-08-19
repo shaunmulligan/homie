@@ -122,7 +122,7 @@ func (grovePi *GrovePi) ReadDHT(pin byte) (float32, float32, error) {
 		return 0, 0, err
 	}
 	temperatureData := rawdata[1:5]
-	fmt.Println(rawdata)
+	// fmt.Println(rawdata)
 
 	tInt := int32(temperatureData[0]) | int32(temperatureData[1])<<8 | int32(temperatureData[2])<<16 | int32(temperatureData[3])<<24
 	t := (*(*float32)(unsafe.Pointer(&tInt)))
@@ -177,7 +177,7 @@ func (grovePi *GrovePi) ReadDustSensor() (float64, error) {
 	}
 	time.Sleep(600 * time.Millisecond)
 	data, err := grovePi.i2cDevice.Read(0, 4)
-	fmt.Println(data)
+	// fmt.Println(data)
 	if data[0] != 255 {
 		lowPulseOccupancy := int(data[3])*256*256 + int(data[2])*256 + int(data[1])
 		ratio := float64(lowPulseOccupancy) / (30000 * 10)
