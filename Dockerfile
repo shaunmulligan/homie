@@ -5,5 +5,4 @@ WORKDIR $GOPATH
 COPY . ./
 RUN go build -o goapp.o github.com/shaunmulligan/goapp
 ENV INITSYSTEM=on
-WORKDIR /
-CMD ["modprobe", "i2c-dev && $GOPATH/goapp.o"]
+CMD ["./start.sh"]
