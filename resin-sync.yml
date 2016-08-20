@@ -5,6 +5,8 @@ ignore:
     - Dockerfile
     - resin-sync.yml
     - src/
+    - bin/
+    - pkg/
     - .gitignore
     - README.md
 progress: true

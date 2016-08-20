@@ -19,51 +19,64 @@ type Measurement struct {
 	dustLevel   float64
 }
 
-func getMeasurements(g *grovepi.GrovePi) Measurement {
-	air, err := g.AnalogRead(grovepi.A0)
-	if err != nil {
-		fmt.Println(err)
-	}
-	// fmt.Printf("Air Quality: %v\n", air)
-
-	light, err := g.AnalogRead(grovepi.A1)
-	if err != nil {
-		fmt.Println(err)
-	}
-	// fmt.Printf("Light Level: %v\n", light)
-
-	t, err := g.Temp(grovepi.A2)
-	if err != nil {
-		fmt.Println(err)
-	}
-	// fmt.Printf("Current Temperature is %f\n", t)
-
-	con, err := g.ReadDustSensor()
-	if err != nil {
-		fmt.Println(err)
-	}
-	// fmt.Printf("dust concentration = %f pcf/0.01cf\n", con)
-
-	m := Measurement{airQuality: air, lightLevel: light, temperature: t, dustLevel: con}
-	return m
+type Sensors struct {
+	*grovepi.GrovePi
 }
 
-func main() {
-	var g grovepi.GrovePi
-	g = *grovepi.InitGrovePi(0x04)
-	defer g.CloseDevice()
+func InitSensors() (Sensors, error) {
+	g := grovepi.InitGrovePi(0x04)
 	time.Sleep(2 * time.Second)
-
+	//show the version of GrovePi Firmware
 	v, err := g.Version()
 	if err != nil {
 		fmt.Println(err)
 	}
 	fmt.Printf("Grovepi Firmware Version: %v\n", v)
 
+	// Enable the dust sensor
 	err = g.EnableDustSensor()
 	if err != nil {
-		fmt.Println(err)
+		fmt.Printf("damn errors: %v", err)
 	}
-	m := getMeasurements(&g)
-	fmt.Println(m)
+
+  return Sensors{g}, nil
+}
+
+func CleanUpSensors(s Sensors) {
+	s.CloseDevice()
+}
+
+func getMeasurements(s Sensors) *Measurement {
+
+	air, err := s.AnalogRead(grovepi.A0)
+	if err != nil {
+		fmt.Printf("come on... %v", err)
+	}
+
+	light, err := s.AnalogRead(grovepi.A1)
+	if err != nil {
+		fmt.Printf("come on... %v", err)
+	}
+
+	temp, err := s.Temp(grovepi.A2)
+	if err != nil {
+		fmt.Printf("come on... %v", err)
+	}
+
+	dust, err := s.ReadDustSensor()
+	if err != nil {
+		fmt.Printf("come on... %v", err)
+	}
+
+	return &Measurement{airQuality: air, lightLevel: light, temperature: temp, dustLevel: dust}
+}
+
+func main() {
+	g, _ := InitSensors()
+	m := getMeasurements(g)
+	CleanUpSensors(g)
+	fmt.Printf("Air Quality: %v\n",m.airQuality)
+	fmt.Printf("Light Level: %v\n",m.lightLevel)
+	fmt.Printf("Temperature: %0.2f C\n",m.temperature)
+	fmt.Printf("Air Quality: %0.2f pcf/0.01cf\n",m.dustLevel)
 }

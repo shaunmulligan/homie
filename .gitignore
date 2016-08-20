@@ -1,2 +1,4 @@
 #Don't commit the cross-compiled go binary
 goapp.o
+bin/
+pkg/
