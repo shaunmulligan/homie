@@ -16,5 +16,5 @@ ENV GOPATH=/usr/src/app
 WORKDIR $GOPATH
 COPY . ./
 RUN go build -o goapp.o github.com/shaunmulligan/goapp
-ENV INITSYSTEM=off
+ENV INITSYSTEM=on
 CMD ["./start.sh"]
