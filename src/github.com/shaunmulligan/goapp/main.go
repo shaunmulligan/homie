@@ -3,8 +3,12 @@ package main
 import (
 	"fmt"
 	"time"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/shaunmulligan/goapp/grovepi"
+	"github.com/jasonlvhit/gocron"
 )
 
 //A Measurement looks like this:
@@ -67,16 +71,44 @@ func getMeasurements(s Sensors) *Measurement {
 	if err != nil {
 		fmt.Printf("come on... %v", err)
 	}
-
+	// Enable the dust sensor
+	err = s.EnableDustSensor()
+	if err != nil {
+		fmt.Printf("damn errors: %v", err)
+	}
 	return &Measurement{airQuality: air, lightLevel: light, temperature: temp, dustLevel: dust}
+}
+
+func printMeasurements(s Sensors) {
+	m := getMeasurements(s)
+	fmt.Printf("===========================================\n")
+	fmt.Printf("Air Quality: %v\n",m.airQuality)
+	fmt.Printf("Light Level: %v\n",m.lightLevel)
+	fmt.Printf("Temperature: %0.2f C\n",m.temperature)
+	fmt.Printf("Dust Conncentration: %0.2f pcf/0.01cf\n",m.dustLevel)
 }
 
 func main() {
 	g, _ := InitSensors()
-	m := getMeasurements(g)
-	CleanUpSensors(g)
-	fmt.Printf("Air Quality: %v\n",m.airQuality)
-	fmt.Printf("Light Level: %v\n",m.lightLevel)
-	fmt.Printf("Temperature: %0.2f C\n",m.temperature)
-	fmt.Printf("Air Quality: %0.2f pcf/0.01cf\n",m.dustLevel)
+	signalChannel := make(chan os.Signal, 2)
+  signal.Notify(signalChannel, syscall.SIGTERM, syscall.SIGKILL)
+  go func() {
+      sig := <-signalChannel
+      switch sig {
+      case syscall.SIGKILL:
+          //handle SIGINT
+					fmt.Println("got SIGKILL")
+					CleanUpSensors(g)
+      case syscall.SIGTERM:
+          //handle SIGTERM
+					fmt.Println("got SIGTERM")
+					CleanUpSensors(g)
+      }
+  }()
+
+	fmt.Println("Starting looper")
+	// gocron.Every(15).Seconds().Do(printMeasurements, g)
+	gocron.Every(10).Minutes().Do(printMeasurements, g)
+	<-gocron.Start()
+
 }
