@@ -18,6 +18,33 @@
 			"notests": true
 		},
 		{
+			"importpath": "github.com/influxdata/influxdb/client/v2",
+			"repository": "https://github.com/influxdata/influxdb",
+			"vcs": "git",
+			"revision": "8b234546a8c68e04136b6a07d9022b2359a5b9fe",
+			"branch": "master",
+			"path": "/client/v2",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/influxdata/influxdb/models",
+			"repository": "https://github.com/influxdata/influxdb",
+			"vcs": "git",
+			"revision": "8b234546a8c68e04136b6a07d9022b2359a5b9fe",
+			"branch": "master",
+			"path": "models",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/influxdata/influxdb/pkg/escape",
+			"repository": "https://github.com/influxdata/influxdb",
+			"vcs": "git",
+			"revision": "8b234546a8c68e04136b6a07d9022b2359a5b9fe",
+			"branch": "master",
+			"path": "pkg/escape",
+			"notests": true
+		},
+		{
 			"importpath": "github.com/jasonlvhit/gocron",
 			"repository": "https://github.com/jasonlvhit/gocron",
 			"vcs": "git",
