@@ -14,7 +14,7 @@ func (db DbConfig) LogValue(s string, l string, v float64) {
 		//TODO: probably shouldn't hardcode database name
 		Database:        "homie",
 		Precision:       "s",
-		RetentionPolicy: "16w",
+		RetentionPolicy: "four_months",
 	})
 
 	error_fail(err)
@@ -49,6 +49,10 @@ func (db *DbConfig) Connect() {
 	log.Println("Conected to DB.")
 	q := client.NewQuery("CREATE DATABASE homie", "", "")
 	if response, err := db.client.Query(q); err == nil && response.Error() == nil {
+		fmt.Println(response.Results)
+	}
+	p := client.NewQuery("CREATE RETENTION POLICY four_months ON homie DURATION 16w REPLICATION 1 DEFAULT", "", "")
+	if response, err := db.client.Query(p); err == nil && response.Error() == nil {
 		fmt.Println(response.Results)
 	}
 }
