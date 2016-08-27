@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"time"
 
@@ -11,8 +12,9 @@ import (
 func (db DbConfig) LogValue(s string, l string, v float64) {
 	bp, err := client.NewBatchPoints(client.BatchPointsConfig{
 		//TODO: probably shouldn't hardcode database name
-		Database:  "homie",
-		Precision: "s",
+		Database:        "homie",
+		Precision:       "s",
+		RetentionPolicy: "16w",
 	})
 
 	error_fail(err)
@@ -45,4 +47,8 @@ func (db *DbConfig) Connect() {
 	})
 	error_fail(err)
 	log.Println("Conected to DB.")
+	q := client.NewQuery("CREATE DATABASE homie", "", "")
+	if response, err := db.client.Query(q); err == nil && response.Error() == nil {
+		fmt.Println(response.Results)
+	}
 }

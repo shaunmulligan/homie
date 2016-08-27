@@ -1,3 +1,5 @@
+echo $INFLUXDB_DATA_DIR
+mkdir -p /data/influx
 echo "Starting InfluxDB..."
 systemctl start influxdb
 # if no INITSYSTEM
