@@ -2,6 +2,46 @@
 	"version": 0,
 	"dependencies": [
 		{
+			"importpath": "github.com/ddo/go-between",
+			"repository": "https://github.com/ddo/go-between",
+			"vcs": "git",
+			"revision": "bd1e1a28ed20002f2e9239a049392cac736479a0",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/ddo/go-dlog",
+			"repository": "https://github.com/ddo/go-dlog",
+			"vcs": "git",
+			"revision": "9ed353159d341e6fc6b1f5f3869478e98a399c7b",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/ddo/go-fast",
+			"repository": "https://github.com/ddo/go-fast",
+			"vcs": "git",
+			"revision": "b263e25cec05103c9ebdd0523ced2380c23c1c62",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/ddo/pick",
+			"repository": "https://github.com/ddo/pick",
+			"vcs": "git",
+			"revision": "8eab72f4dfb85e5c5bc2d79778f75eaeb86ab209",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/ddo/request",
+			"repository": "https://github.com/ddo/request",
+			"vcs": "git",
+			"revision": "e635d1ed536ec01faeaa067c51b755dcc9b566fa",
+			"branch": "master",
+			"notests": true
+		},
+		{
 			"importpath": "github.com/gorilla/context",
 			"repository": "https://github.com/gorilla/context",
 			"vcs": "git",
@@ -57,6 +97,111 @@
 			"repository": "https://github.com/mrmorphic/hwio",
 			"vcs": "git",
 			"revision": "4af3c0a919085ce9b99bbe5a8e3334b805618c2e",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "golang.org/x/net/html",
+			"repository": "https://go.googlesource.com/net",
+			"vcs": "git",
+			"revision": "6250b412798208e6c90b03b7c4f226de5aa299e2",
+			"branch": "master",
+			"path": "/html",
+			"notests": true
+		},
+		{
+			"importpath": "golang.org/x/text/encoding",
+			"repository": "https://go.googlesource.com/text",
+			"vcs": "git",
+			"revision": "d69c40b4be55797923cec7457fac7a244d91a9b6",
+			"branch": "master",
+			"path": "/encoding",
+			"notests": true
+		},
+		{
+			"importpath": "golang.org/x/text/internal/gen",
+			"repository": "https://go.googlesource.com/text",
+			"vcs": "git",
+			"revision": "d69c40b4be55797923cec7457fac7a244d91a9b6",
+			"branch": "master",
+			"path": "internal/gen",
+			"notests": true
+		},
+		{
+			"importpath": "golang.org/x/text/internal/tag",
+			"repository": "https://go.googlesource.com/text",
+			"vcs": "git",
+			"revision": "d69c40b4be55797923cec7457fac7a244d91a9b6",
+			"branch": "master",
+			"path": "internal/tag",
+			"notests": true
+		},
+		{
+			"importpath": "golang.org/x/text/internal/utf8internal",
+			"repository": "https://go.googlesource.com/text",
+			"vcs": "git",
+			"revision": "d69c40b4be55797923cec7457fac7a244d91a9b6",
+			"branch": "master",
+			"path": "internal/utf8internal",
+			"notests": true
+		},
+		{
+			"importpath": "golang.org/x/text/language",
+			"repository": "https://go.googlesource.com/text",
+			"vcs": "git",
+			"revision": "d69c40b4be55797923cec7457fac7a244d91a9b6",
+			"branch": "master",
+			"path": "language",
+			"notests": true
+		},
+		{
+			"importpath": "golang.org/x/text/runes",
+			"repository": "https://go.googlesource.com/text",
+			"vcs": "git",
+			"revision": "d69c40b4be55797923cec7457fac7a244d91a9b6",
+			"branch": "master",
+			"path": "runes",
+			"notests": true
+		},
+		{
+			"importpath": "golang.org/x/text/transform",
+			"repository": "https://go.googlesource.com/text",
+			"vcs": "git",
+			"revision": "d69c40b4be55797923cec7457fac7a244d91a9b6",
+			"branch": "master",
+			"path": "transform",
+			"notests": true
+		},
+		{
+			"importpath": "golang.org/x/text/unicode/cldr",
+			"repository": "https://go.googlesource.com/text",
+			"vcs": "git",
+			"revision": "d69c40b4be55797923cec7457fac7a244d91a9b6",
+			"branch": "master",
+			"path": "unicode/cldr",
+			"notests": true
+		},
+		{
+			"importpath": "gopkg.in/ddo/go-dlog.v1",
+			"repository": "https://gopkg.in/ddo/go-dlog.v1",
+			"vcs": "git",
+			"revision": "9ed353159d341e6fc6b1f5f3869478e98a399c7b",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "gopkg.in/ddo/pick.v1",
+			"repository": "https://gopkg.in/ddo/pick.v1",
+			"vcs": "git",
+			"revision": "adc8c8afa157485051c04039054e57fe7c990dde",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "gopkg.in/ddo/request.v1",
+			"repository": "https://gopkg.in/ddo/request.v1",
+			"vcs": "git",
+			"revision": "e635d1ed536ec01faeaa067c51b755dcc9b566fa",
 			"branch": "master",
 			"notests": true
 		}

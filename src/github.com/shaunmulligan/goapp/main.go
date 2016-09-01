@@ -7,6 +7,7 @@ import (
 	"syscall"
 	"time"
 
+	fast "github.com/ddo/go-fast"
 	"github.com/jasonlvhit/gocron"
 	"github.com/shaunmulligan/goapp/grovepi"
 )
@@ -27,6 +28,7 @@ type Sensors struct {
 	*grovepi.GrovePi
 }
 
+// InitSensors enables GrovePi hat and the dust Sensor
 func InitSensors() (Sensors, error) {
 	g := grovepi.InitGrovePi(0x04)
 	time.Sleep(2 * time.Second)
@@ -97,30 +99,21 @@ func main() {
 		}
 	}()
 
-	// Set up database
-	// dbuser := ""
-	// dbpass := ""
-
 	db := DbConfig{
 		Address:   "http://127.0.0.1:8086",
 		Database:  "homie",
 		Precision: "s",
 	}
-	// if *dbuser != "" && *dbpass != "" {
-	// 	db.Username = *dbuser
-	// 	db.Password = *dbpass
-	// }
 	db.Connect()
 
-	// db.LogValue(*sensor, *location, *reading)
-
 	fmt.Println("Starting looper")
-	// gocron.Every(15).Seconds().Do(printMeasurements, g)
-	gocron.Every(1).Minutes().Do(db.insertMeasurement, g)
+	gocron.Every(5).Minutes().Do(db.insertMeasurement, g)
+	gocron.Every(20).Minutes().Do(db.measureInternet)
 	<-gocron.Start()
 
 }
 
+// TODO: break this into separate goroutines for each sensor
 func (db *DbConfig) insertMeasurement(s Sensors) {
 	m := getMeasurements(s)
 	fmt.Printf("===========================================\n")
@@ -129,4 +122,39 @@ func (db *DbConfig) insertMeasurement(s Sensors) {
 	db.LogValue("dust", "home", m.dustLevel)
 	db.LogValue("temperature", "home", m.temperature)
 
+}
+
+func (db *DbConfig) measureInternet() {
+	fastCom := fast.New()
+	err := fastCom.Init()
+	if err != nil {
+		panic(err)
+	}
+	// get urls
+	urls, err := fastCom.GetUrls()
+	if err != nil {
+		panic(err)
+	}
+
+	// measure
+	KbpsChan := make(chan float64)
+	go func() {
+		sumK := 0.0
+		i := 0.0
+		for Kbps := range KbpsChan {
+			// fmt.Printf("%.2f Kbps %.2f Mbps\n", Kbps, Kbps/1000)
+			sumK = sumK + Kbps
+			i++
+		}
+		avgSpeed := (sumK / i) / 1000
+		fmt.Printf("Average Internet Speed: %v\n", avgSpeed)
+		db.LogValue("internet", "home", avgSpeed)
+	}()
+
+	err = fastCom.Measure(urls, KbpsChan)
+
+	if err != nil {
+		fmt.Println("I am gonna panic!!")
+		panic(err)
+	}
 }
